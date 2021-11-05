@@ -1,6 +1,7 @@
 // import { v4 as uuid } from "uuid";
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, beforeSave, column } from "@ioc:Adonis/Lucid/Orm";
+import bcrypt from "bcrypt";
 
 export default class User extends BaseModel {
   public static tableName: string = "users";
@@ -31,4 +32,9 @@ export default class User extends BaseModel {
   // public static assignUuid(user: User) {
   //   user.id = uuid();
   // }
+
+  @beforeSave()
+  public static async hashPassword(user: User) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
 }
