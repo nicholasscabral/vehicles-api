@@ -7,8 +7,14 @@ export default class AuthController {
 
     const user = await User.create({ email: email, password: password });
 
-    console.log(user);
-
     return response.json(user);
+  }
+
+  public async authenticate({ request, auth }: HttpContextContract) {
+    const { email, password } = request.only(["email", "password"]);
+
+    const token = await auth.attempt(email, password);
+
+    return token;
   }
 }

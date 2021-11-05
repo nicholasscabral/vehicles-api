@@ -1,14 +1,13 @@
-// import { v4 as uuid } from "uuid";
 import { DateTime } from "luxon";
 import { BaseModel, beforeSave, column } from "@ioc:Adonis/Lucid/Orm";
-import bcrypt from "bcrypt";
+import Hash from "@ioc:Adonis/Core/Hash";
 
 export default class User extends BaseModel {
   public static tableName: string = "users";
   public static selfAssignPrimaryKey = true;
 
   @column({ isPrimary: true })
-  public id: number;
+  public id: string;
 
   @column()
   public email: string;
@@ -28,13 +27,10 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  // @beforeCreate()
-  // public static assignUuid(user: User) {
-  //   user.id = uuid();
-  // }
-
   @beforeSave()
   public static async hashPassword(user: User) {
-    user.password = await bcrypt.hash(user.password, 8);
+    if (user.$dirty.password) {
+      user.password = await Hash.make(user.password);
+    }
   }
 }
