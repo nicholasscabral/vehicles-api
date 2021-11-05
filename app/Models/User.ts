@@ -18,9 +18,6 @@ export default class User extends BaseModel {
   @column()
   public token: string;
 
-  @column.dateTime({ autoCreate: false })
-  public tokenExpires: DateTime;
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
