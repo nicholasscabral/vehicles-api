@@ -1,19 +1,16 @@
 import Route from "@ioc:Adonis/Core/Route";
 
-Route.post("/", "AuthController.register");
-Route.post("/login", "AuthController.login");
+Route.group(() => {
+  Route.post("/register", "AuthController.register").as("auth.login")
+  Route.post("/login", "AuthController.login").as("auth.register")
+}).prefix("/auth")
 
-Route.get("/users", "UsersController.index").middleware(["auth"]);
-
-// Route.get("/vehicles", "VehiclesController.index");
-// Route.put("/vehicle/:id", "VehiclesController.update");
+Route.group(() => {
+  Route.resource("users", "UsersController").apiOnly()
+}).middleware(["auth"]);
 
 Route.group(() => {
   Route.resource("vehicles", "VehiclesController").apiOnly();
-  // Route.post("/vehicle", "VehiclesController.store")
+  Route.get("/vehicles/u/:userId", "VehiclesController.vehiclesByUser")
+  .as("vehicles.vehiclesByUser")
 }).middleware(["auth"]);
-
-Route.get(
-  "/vehicles/u/:userId",
-  "VehiclesController.vehiclesByUser"
-).middleware(["auth"]);
