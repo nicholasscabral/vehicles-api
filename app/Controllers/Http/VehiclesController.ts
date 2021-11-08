@@ -9,6 +9,19 @@ export default class VehiclesController {
     return vehicles;
   }
 
+  public async show({ params, auth, response }: HttpContextContract) {
+    const { id } = params;
+    const vehicle = await Vehicle.findOrFail(id);
+
+    if (vehicle.userId !== auth.user?.id) {
+      return response
+        .status(401)
+        .json({ message: "you can only see your vehicles" });
+    }
+
+    return response.json(vehicle);
+  }
+
   public async store({ request, auth, response }: HttpContextContract) {
     const data = request.all();
 
