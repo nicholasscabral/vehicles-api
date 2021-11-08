@@ -32,4 +32,8 @@ export default class Vehicle extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
+
+  async owner(): Promise<User> {
+    return await User.findOrFail(this.userId);
+  }
 }
