@@ -8,18 +8,12 @@ export default class VehiclesController {
     return vehicles;
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    const { plate, description, color, model, location } = request.all();
+  public async store({ request, auth, response }: HttpContextContract) {
+    const data = request.all();
 
-    console.log(request.all());
+    console.log(auth.user)
 
-    const vehicle = await Vehicle.create({
-      plate,
-      description,
-      color,
-      model,
-      location,
-    });
+    const vehicle = await Vehicle.create({ userId: auth.user?.id, ...data});
 
     return response.status(201).json(vehicle);
   }

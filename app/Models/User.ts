@@ -14,7 +14,7 @@ export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true;
 
   @column({ isPrimary: true })
-  public id: string;
+  public id: number;
 
   @column()
   public email: string;
@@ -25,15 +25,15 @@ export default class User extends BaseModel {
   @column()
   public token: string;
 
-  @hasMany(() => Vehicle, { foreignKey: "FKUserVehicle" })
-  public vehicles: HasMany<typeof Vehicle>;
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
-
+  
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
+  @hasMany(() => Vehicle, { foreignKey: "FKUserVehicle" })
+  public vehicles: HasMany<typeof Vehicle>;
+  
   @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.password) {
