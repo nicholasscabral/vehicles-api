@@ -18,7 +18,7 @@ export default class Vehicle extends BaseModel {
   public model: string;
 
   @column()
-  public address: string;
+  public location: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

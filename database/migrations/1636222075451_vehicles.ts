@@ -5,14 +5,14 @@ export default class Vehicles extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments("id");
+      table.increments("id").primary();
       table.string("plate").notNullable().unique();
       table.text("description").notNullable();
       table.string("color").notNullable();
       table.string("model").notNullable();
-      table.string("address").notNullable();
-      table.timestamp("created_at", { useTz: true });
-      table.timestamp("updated_at", { useTz: true });
+      table.string("location").notNullable();
+      table.dateTime("created_at", { useTz: true }).defaultTo(this.now());
+      table.dateTime("updated_at", { useTz: true }).defaultTo(this.now());
     });
   }
 
