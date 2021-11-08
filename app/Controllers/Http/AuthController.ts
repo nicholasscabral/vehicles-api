@@ -22,11 +22,23 @@ export default class AuthController {
     }
   }
 
-  public async login({ request, auth }: HttpContextContract) {
+  public async login({ request, auth, response }: HttpContextContract) {
     const { email, password } = request.all();
 
-    const token = await auth.attempt(email, password, { expiresIn: "2 min" });
+    const user = await User.findBy("email", email);
 
-    return token;
+    if (!user) {
+      return response.status(404).json({ message: "user not found" });
+    }
+
+    const res = await auth.attempt(email, password, { expiresIn: "2 min" });
+
+    user.token = res.token;
+
+    await user.save();
+
+    // Database.from("api_tokens").where("expires_at", "<", "NOW()").delete();
+
+    return response.status(200).json({ user, token: res });
   }
 }
