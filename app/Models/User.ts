@@ -40,4 +40,8 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password);
     }
   }
+
+  async vefiryPassword(plainTextPassword: string) {
+    return await Hash.verify(this.password, plainTextPassword);
+  }
 }
