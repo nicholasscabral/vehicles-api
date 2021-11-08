@@ -1,4 +1,5 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import User from "App/Models/User";
 import Vehicle from "App/Models/Vehicle";
 
 export default class VehiclesController {
@@ -11,9 +12,7 @@ export default class VehiclesController {
   public async store({ request, auth, response }: HttpContextContract) {
     const data = request.all();
 
-    console.log(auth.user)
-
-    const vehicle = await Vehicle.create({ userId: auth.user?.id, ...data});
+    const vehicle = await Vehicle.create({ userId: auth.user?.id, ...data });
 
     return response.status(201).json(vehicle);
   }
@@ -35,5 +34,21 @@ export default class VehiclesController {
     const savedVehicle = await vehicle.save();
 
     return response.json(savedVehicle);
+  }
+
+  public async vehiclesByUser({ params, auth, response }: HttpContextContract) {
+    const { userId } = params;
+
+    if (userId != auth.user?.id) {
+      return response
+        .status(401)
+        .json({ message: "you can only list your vehicles" });
+    }
+
+    const user = await User.findOrFail(userId);
+
+    const vehicles = await user.related("vehicles").query();
+
+    return vehicles;
   }
 }
