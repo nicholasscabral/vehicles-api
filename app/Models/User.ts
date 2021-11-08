@@ -1,6 +1,13 @@
 import { DateTime } from "luxon";
-import { BaseModel, beforeSave, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  HasMany,
+  hasMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import Hash from "@ioc:Adonis/Core/Hash";
+import Vehicle from "./Vehicle";
 
 export default class User extends BaseModel {
   public static tableName: string = "users";
@@ -17,6 +24,9 @@ export default class User extends BaseModel {
 
   @column()
   public token: string;
+
+  @hasMany(() => Vehicle, { foreignKey: "FKUserVehicle" })
+  public vehicles: HasMany<typeof Vehicle>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
