@@ -36,6 +36,21 @@ export default class VehiclesController {
     return response.json(savedVehicle);
   }
 
+  public async destroy({ params, auth, response }: HttpContextContract) {
+    const { id } = params;
+    const vehicle = await Vehicle.findOrFail(id);
+
+    if (vehicle.userId !== auth.user?.id) {
+      return response
+        .status(401)
+        .json({ message: "you can only delete your vehicles" });
+    }
+
+    await vehicle.delete();
+
+    return response.json({ message: "Vehicle deleted successfully" });
+  }
+
   public async vehiclesByUser({ params, auth, response }: HttpContextContract) {
     const { userId } = params;
 
