@@ -7,7 +7,7 @@ export default class Vehicle extends BaseModel {
   public id: number;
 
   @column()
-  public userId: number
+  public userId: number;
 
   @column()
   public plate: string;
@@ -30,6 +30,6 @@ export default class Vehicle extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  @belongsTo(() => User, {localKey: "FKUserVehicle"})
+  @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
 }
