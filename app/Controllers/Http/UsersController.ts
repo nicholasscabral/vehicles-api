@@ -66,4 +66,20 @@ export default class UsersController {
 
     return response.json({ message: "user deleted successfully" });
   }
+
+  public async vehicles({ params, auth, response }: HttpContextContract) {
+    const { id } = params;
+
+    if (id != auth.user?.id) {
+      return response
+        .status(401)
+        .json({ message: "you can only list your vehicles" });
+    }
+
+    const user = await User.findOrFail(id);
+
+    const vehicles = await user.related("vehicles").query();
+
+    return vehicles;
+  }
 }

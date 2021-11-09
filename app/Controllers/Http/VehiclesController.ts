@@ -1,5 +1,4 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import User from "App/Models/User";
 import Vehicle from "App/Models/Vehicle";
 
 export default class VehiclesController {
@@ -62,21 +61,5 @@ export default class VehiclesController {
     await vehicle.delete();
 
     return response.json({ message: "Vehicle deleted successfully" });
-  }
-
-  public async vehiclesByUser({ params, auth, response }: HttpContextContract) {
-    const { userId } = params;
-
-    if (userId != auth.user?.id) {
-      return response
-        .status(401)
-        .json({ message: "you can only list your vehicles" });
-    }
-
-    const user = await User.findOrFail(userId);
-
-    const vehicles = await user.related("vehicles").query();
-
-    return vehicles;
   }
 }

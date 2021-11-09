@@ -7,10 +7,9 @@ Route.group(() => {
 
 Route.group(() => {
   Route.resource("users", "UsersController").apiOnly()
+  Route.get("users/:id/vehicles", "UsersController.vehicles").as("users.vehicles")
 }).middleware(["auth"]);
 
 Route.group(() => {
   Route.resource("vehicles", "VehiclesController").apiOnly();
-  Route.get("/vehicles/u/:userId", "VehiclesController.vehiclesByUser")
-  .as("vehicles.vehiclesByUser")
 }).middleware(["auth"]);
