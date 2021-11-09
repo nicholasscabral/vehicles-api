@@ -7,9 +7,8 @@
  </p>
  
  <p align="center">
-   <img src="https://img.shields.io/github/languages/top/nicholasscabral/corpvs-api"> 
-   <img src="https://img.shields.io/github/repo-size/nicholasscabral/nps-api"> 
-   <img src="https://img.shields.io/badge/License-MIT-green.svg"> 
+   <img src="https://img.shields.io/github/languages/top/nicholasscabral/corpvs-api">  
+   <img src="https://img.shields.io/github/repo-size/nicholasscabral/corpvs-api"> 
  </p>
  
  <div align="center">
