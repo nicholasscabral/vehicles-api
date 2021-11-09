@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
 import User from "./User";
+import Database from "@ioc:Adonis/Lucid/Database";
 
 export default class Vehicle extends BaseModel {
   @column({ isPrimary: true })
@@ -33,7 +34,9 @@ export default class Vehicle extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
 
-  async owner(): Promise<User> {
-    return await User.findOrFail(this.userId);
+  async owner() {
+    return await Database.from("users")
+    .where("id", this.userId)
+    .select("id", "email")
   }
 }

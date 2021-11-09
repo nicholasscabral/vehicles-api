@@ -12,4 +12,5 @@ Route.group(() => {
 
 Route.group(() => {
   Route.resource("vehicles", "VehiclesController").apiOnly();
+  Route.get("/vehicles/:id/owner", "VehiclesController.owner").as("vehicles.owner")
 }).middleware(["auth"]);
