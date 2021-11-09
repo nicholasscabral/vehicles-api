@@ -39,4 +39,15 @@ export default class Vehicle extends BaseModel {
     .where("id", this.userId)
     .select("id", "email")
   }
+
+  async associateOwner(vehicle: Vehicle, userId: string) {  
+    try {
+      const user = await User.findOrFail(userId)
+      await vehicle.related("user").associate(user)
+
+      return true
+    } catch (err) {
+      return false
+    }
+  }
 }

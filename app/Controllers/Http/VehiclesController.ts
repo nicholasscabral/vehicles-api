@@ -72,4 +72,21 @@ export default class VehiclesController {
 
     return response.json(owner[0])
   }
+
+  public async associateOwner({ params, response }: HttpContextContract) {
+    const { id, userId } = params
+
+    const vehicle = await Vehicle.findOrFail(id)
+
+    if (userId == vehicle.userId)
+      return response.status(400).json({message: "this user already own this vehicle"})
+
+    const success = await vehicle.associateOwner(vehicle, userId)
+
+    if (!success) {
+      return response.status(500).json({message: "Internal server error"})
+    }
+
+    return response.status(200).json({message: "vehicle owner successfully associated"})
+  }
 }
