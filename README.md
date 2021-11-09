@@ -17,7 +17,7 @@
   [Technologies](#construction_worker-built-with) | 
   [Installing](#arrow_down-installing) |
   [Configuring](#gear-configuring) | 
-  [How to run](#triangular_flag_on_post-usage) |   
+  [How to run](#triangular_flag_on_post-usage) 
  </div>
  
  ## :construction_worker: Built with
@@ -72,3 +72,6 @@ $ yarn dev
 ```
 $ npm run dev
 ```
+
+### Routes
+![aa](https://github.com/nicholasscabral/corpvs-api/blob/master/public/api_routes.png)
