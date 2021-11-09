@@ -1,5 +1,6 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Vehicle from "App/Models/Vehicle";
+import axios from "axios";
 
 export default class VehiclesController {
   public async index() {
@@ -63,58 +64,95 @@ export default class VehiclesController {
     return response.json({ message: "Vehicle deleted successfully" });
   }
 
-  public async owner({params, response}: HttpContextContract) {
+  public async owner({ params, response }: HttpContextContract) {
     const { id } = params;
 
     const vehicle = await Vehicle.findOrFail(id);
 
-    const owner = await vehicle.owner()
+    const owner = await vehicle.owner();
 
-    return response.json(owner[0])
+    return response.json(owner[0]);
   }
 
   public async associateOwner({ params, response }: HttpContextContract) {
-    const { id, userId } = params
+    const { id, userId } = params;
 
-    const vehicle = await Vehicle.findOrFail(id)
-    
+    const vehicle = await Vehicle.findOrFail(id);
+
     if (vehicle.hasOwner()) {
       if (userId == vehicle.userId) {
-        return response.status(400).json({ message: "this user already own this vehicle" })
-      } 
-      else { // userId != vehicle.userId
-        return response.status(401).json({ message: "this vehicle belongs to another user." })
+        return response
+          .status(400)
+          .json({ message: "this user already own this vehicle" });
+      } else {
+        // userId != vehicle.userId
+        return response
+          .status(401)
+          .json({ message: "this vehicle belongs to another user." });
       }
     }
-    
-    const success = await vehicle.associateOwner(vehicle, userId)
+
+    const success = await vehicle.associateOwner(vehicle, userId);
 
     if (!success) {
-      return response.status(500).json({message: "Internal server error"})
+      return response.status(500).json({ message: "Internal server error" });
     }
 
-    return response.status(200).json({message: "vehicle owner successfully associated"})
+    return response
+      .status(200)
+      .json({ message: "vehicle owner successfully associated" });
   }
 
-  public async dissociateOwner({ params, auth, response }: HttpContextContract) {
-    const { id, userId } = params
+  public async dissociateOwner({
+    params,
+    auth,
+    response,
+  }: HttpContextContract) {
+    const { id, userId } = params;
 
     if (userId != auth.user?.id) {
-      return response.status(401).json({ message: "you must be logged in first" })
+      return response
+        .status(401)
+        .json({ message: "you must be logged in first" });
     }
 
-    const vehicle = await Vehicle.findOrFail(id)
+    const vehicle = await Vehicle.findOrFail(id);
 
     if (userId != vehicle.userId) {
-      return response.status(401).json({ message: "this user doesn't own this vehicle" })
+      return response
+        .status(401)
+        .json({ message: "this user doesn't own this vehicle" });
     }
-    
-    const success = await vehicle.dissociateOwner(vehicle)
+
+    const success = await vehicle.dissociateOwner(vehicle);
 
     if (!success) {
-      return response.status(500).json({message: "Internal server error"})
+      return response.status(500).json({ message: "Internal server error" });
     }
 
-    return response.status(200).json({message: "vehicle owner successfully dissociated"})
+    return response
+      .status(200)
+      .json({ message: "vehicle owner successfully dissociated" });
+  }
+
+  public async location({ request }: HttpContextContract) {
+    const options = request.qs();
+    let vehicle
+
+    console.log(options);
+
+    if (options.id) {
+      vehicle = await Vehicle.findOrFail(options.id);
+    } else if (options.plate) {
+      vehicle = await Vehicle.findByOrFail("plate", options.plate);
+    }
+
+    const { lat, lon } = await vehicle.getLocation();
+
+    const location = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?format=json&accept-language=br&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
+    );
+
+    return location.data;
   }
 }

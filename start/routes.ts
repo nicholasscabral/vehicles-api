@@ -16,3 +16,5 @@ Route.group(() => {
   Route.put("/vehicles/:id/associate/:userId", "VehiclesController.associateOwner").as("vehicles.associateOwner")
   Route.put("/vehicles/:id/dissociate/:userId", "VehiclesController.dissociateOwner").as("vehicles.dissociateOwner")
 }).middleware(["auth"]);
+
+Route.get("/vehicle/location/", "VehiclesController.location")

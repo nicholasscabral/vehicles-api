@@ -34,34 +34,40 @@ export default class Vehicle extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
 
+  async getLocation(): Promise<Object> {
+    const locationArray = this.location.split(",");
+
+    return { lat: locationArray[0], lon: locationArray[1] };
+  }
+
   hasOwner() {
-    return this.userId != null ? true : false
+    return this.userId != null ? true : false;
   }
 
   async owner() {
     return await Database.from("users")
-    .where("id", this.userId)
-    .select("id", "email")
+      .where("id", this.userId)
+      .select("id", "email");
   }
 
-  async associateOwner(vehicle: Vehicle, userId: string) {  
+  async associateOwner(vehicle: Vehicle, userId: string) {
     try {
-      const user = await User.findOrFail(userId)
-      await vehicle.related("user").associate(user)
+      const user = await User.findOrFail(userId);
+      await vehicle.related("user").associate(user);
 
-      return true
+      return true;
     } catch (err) {
-      return false
+      return false;
     }
   }
 
   async dissociateOwner(vehicle: Vehicle) {
     try {
-      await vehicle.related("user").dissociate()
-      
-      return true
+      await vehicle.related("user").dissociate();
+
+      return true;
     } catch (err) {
-      return false
+      return false;
     }
   }
 }
