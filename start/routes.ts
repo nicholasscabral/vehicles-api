@@ -13,8 +13,8 @@ Route.group(() => {
 Route.group(() => {
   Route.resource("vehicles", "VehiclesController").apiOnly();
   Route.get("/vehicles/:id/owner", "VehiclesController.owner").as("vehicles.owner")
+  Route.get("/vehicle/location/", "VehiclesController.location").as("vehicles.location")
   Route.put("/vehicles/:id/associate/:userId", "VehiclesController.associateOwner").as("vehicles.associateOwner")
   Route.put("/vehicles/:id/dissociate/:userId", "VehiclesController.dissociateOwner").as("vehicles.dissociateOwner")
 }).middleware(["auth"]);
 
-Route.get("/vehicle/location/", "VehiclesController.location")
