@@ -77,10 +77,16 @@ export default class VehiclesController {
     const { id, userId } = params
 
     const vehicle = await Vehicle.findOrFail(id)
-
-    if (userId == vehicle.userId)
-      return response.status(400).json({message: "this user already own this vehicle"})
-
+    
+    if (vehicle.hasOwner()) {
+      if (userId == vehicle.userId) {
+        return response.status(400).json({ message: "this user already own this vehicle" })
+      } 
+      else { // userId != vehicle.userId
+        return response.status(401).json({ message: "this vehicle belongs to another user." })
+      }
+    }
+    
     const success = await vehicle.associateOwner(vehicle, userId)
 
     if (!success) {
@@ -88,5 +94,27 @@ export default class VehiclesController {
     }
 
     return response.status(200).json({message: "vehicle owner successfully associated"})
+  }
+
+  public async dissociateOwner({ params, auth, response }: HttpContextContract) {
+    const { id, userId } = params
+
+    if (userId != auth.user?.id) {
+      return response.status(401).json({ message: "you must be logged in first" })
+    }
+
+    const vehicle = await Vehicle.findOrFail(id)
+
+    if (userId != vehicle.userId) {
+      return response.status(401).json({ message: "this user doesn't own this vehicle" })
+    }
+    
+    const success = await vehicle.dissociateOwner(vehicle)
+
+    if (!success) {
+      return response.status(500).json({message: "Internal server error"})
+    }
+
+    return response.status(200).json({message: "vehicle owner successfully dissociated"})
   }
 }

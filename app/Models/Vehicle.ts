@@ -34,6 +34,10 @@ export default class Vehicle extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
 
+  hasOwner() {
+    return this.userId != null ? true : false
+  }
+
   async owner() {
     return await Database.from("users")
     .where("id", this.userId)
@@ -45,6 +49,16 @@ export default class Vehicle extends BaseModel {
       const user = await User.findOrFail(userId)
       await vehicle.related("user").associate(user)
 
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
+  async dissociateOwner(vehicle: Vehicle) {
+    try {
+      await vehicle.related("user").dissociate()
+      
       return true
     } catch (err) {
       return false
