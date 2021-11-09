@@ -17,10 +17,7 @@
   [Technologies](#construction_worker-built-with) | 
   [Installing](#arrow_down-installing) |
   [Configuring](#gear-configuring) | 
-  [How to run](#triangular_flag_on_post-usage) |
-  [Tests](#heavy_check_mark-tests) |
-  [License](#label-license)
-   
+  [How to run](#triangular_flag_on_post-usage) |   
  </div>
  
  ## :construction_worker: Built with
