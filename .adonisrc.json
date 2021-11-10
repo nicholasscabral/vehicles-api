@@ -2,6 +2,7 @@
   "typescript": true,
   "commands": [
     "./commands",
+    "./commands/ClearExpiredTokens.ts",
     "@adonisjs/core/build/commands/index.js",
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands"

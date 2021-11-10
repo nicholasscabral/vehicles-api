@@ -1,5 +1,17 @@
 {
   "commands": {
+    "clear:expired_tokens": {
+      "settings": {
+        "loadApp": false,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/ClearExpiredTokens",
+      "commandName": "clear:expired_tokens",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",
