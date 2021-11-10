@@ -1,5 +1,5 @@
 {
-  "name": "corpvs-api",
+  "name": "vehicles-api",
   "version": "1.0.0",
   "private": true,
   "scripts": {
