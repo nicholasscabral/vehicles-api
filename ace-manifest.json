@@ -2,12 +2,12 @@
   "commands": {
     "clear:expired_tokens": {
       "settings": {
-        "loadApp": false,
+        "loadApp": true,
         "stayAlive": false
       },
       "commandPath": "./commands/ClearExpiredTokens",
       "commandName": "clear:expired_tokens",
-      "description": "",
+      "description": "automatically delete all the expired tokens",
       "args": [],
       "aliases": [],
       "flags": []

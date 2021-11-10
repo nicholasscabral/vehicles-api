@@ -1,37 +1,26 @@
-import { BaseCommand } from '@adonisjs/core/build/standalone'
-
+import { BaseCommand } from "@adonisjs/core/build/standalone";
 export default class ClearExpiredTokens extends BaseCommand {
+  public static commandName = "clear:expired_tokens";
 
-  /**
-   * Command name is used to run the command
-   */
-  public static commandName = 'clear:expired_tokens'
+  public static needsApplication = true;
 
-  /**
-   * Command description is displayed in the "help" output
-   */
-  public static description = ''
+  public static description = "automatically delete all the expired tokens";
 
   public static settings = {
-    /**
-     * Set the following value to true, if you want to load the application
-     * before running the command
-     */
-    loadApp: false,
-
-    /**
-     * Set the following value to true, if you want this command to keep running until
-     * you manually decide to exit the process
-     */
+    loadApp: true,
     stayAlive: false,
-  }
+  };
 
-  public async run () {
-    const { default: Database } = await import('@ioc:Adonis/Lucid/Database')
-    console.log(Database)
+  public async run() {
+    const Database = (await import("@ioc:Adonis/Lucid/Database")).default;
 
-    await Database.from("api_tokens").where('expires_at', '>', "CURRENT_DATETIME").delete()
+    const expiredTokens = await Database.from("api_tokens")
+      .where("expires_at", "<", new Date())
+      .select("id", "expires_at");
+    const deletedTokens = await Database.from("api_tokens")
+      .where("expires_at", "<", new Date())
+      .delete();
 
-    console.log("testessssssssssq errrrrrrrrrrrrrrr")
+    console.log(expiredTokens, `${deletedTokens} tokens were deleted`);
   }
 }

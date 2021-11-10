@@ -32,15 +32,6 @@ export default class AuthController {
       return response.status(404).json({ message: "user not found" });
     }
 
-    const expiredTokens = await Database.from("api_tokens")
-      .where("expires_at", "<", new Date())
-      .select("id", "expires_at");
-    const deletedTokens = await Database.from("api_tokens")
-      .where("expires_at", "<", new Date())
-      .delete();
-
-    console.log(expiredTokens, `${deletedTokens} tokens were deleted`);
-
     const res = await auth.attempt(email, password, { expiresIn: "2 min" });
 
     user.token = res.token;
