@@ -44,7 +44,7 @@ $ npm install
 
 ## :gear: Configuring
 
- <p>The application use <a href="https://www.sqlite.org/index.html">MySQL</a> as database</p>
+ <p>The application use <a href="https://www.mysql.com/">MySQL</a> as database</p>
  
  ### MySQL
  <p>Is responsible for storing all the users, vehicles and tokens</p>
