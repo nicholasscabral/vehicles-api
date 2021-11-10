@@ -7,8 +7,8 @@
  </p>
  
  <p align="center">
-   <img src="https://img.shields.io/github/languages/top/nicholasscabral/corpvs-api">  
-   <img src="https://img.shields.io/github/repo-size/nicholasscabral/corpvs-api"> 
+   <img src="https://img.shields.io/github/languages/top/nicholasscabral/vehicles-api">  
+   <img src="https://img.shields.io/github/repo-size/nicholasscabral/vehicles-api"> 
  </p>
  
  <div align="center">
